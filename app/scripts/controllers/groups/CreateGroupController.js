@@ -15,6 +15,7 @@
             scope.formData = {};
             scope.formData.clientMembers = [];
             scope.forceOffice = null;
+            scope.code = "+254";
 
             var requestParams = {orderBy: 'name', sortOrder: 'ASC', staffInSelectedOfficeOnly: true};
             if (routeParams.centerId) {

@@ -126,6 +126,8 @@
     "label.input.middlename": "Middle name",
     "label.input.accno": "Account#",
     "label.input.activationdate": "Activation date",
+    "label.input.mobilenumber": "Mobile Number",
+    "label.input.emailid":"Email Id",
     "label.input.staff": "Staff",
     "label.input.office": "Office",
     "label.input.client": "Client",
@@ -331,6 +333,7 @@
     "error.msg.loan.writeoff.cannot.be.undone.before.client.transfer.date": " The date on which a write off is made cannot be earlier than client's transfer date of ({{params[0].value}}) ",
     "error.msg.loan.close.cannot.be.undone.before.client.transfer.date": " The date on which the loan is repaid in full cannot be earlier than client's transfer date of ({{params[0].value}}) ",
     "error.msg.loan.repayment.or.waiver.account.is.not.active" : "Loan account is not active",
+    "error.msg.email.id.invalid": "Email Id is not Valid",
 
     "#---------": "------------",
     "#Common loan/saving charges": "....",

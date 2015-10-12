@@ -2,6 +2,7 @@
     mifosX.controllers = _.extend(module, {
         EditGroupController: function (scope, resourceFactory, location, routeParams, dateFilter) {
             scope.first = {};
+            scope.code = "+254";
             scope.managecode = routeParams.managecode;
             scope.restrictDate = new Date();
             resourceFactory.groupResource.get({groupId: routeParams.id, associations: 'clientMembers', template: 'true',staffInSelectedOfficeOnly:true}, function (data) {
@@ -9,7 +10,9 @@
                 scope.formData = {
                     name: data.name,
                     externalId: data.externalId,
-                    staffId: data.staffId
+                    staffId: data.staffId,
+                    mobileNo: data.mobileNo,
+                    emailId: data.emailId
                 };
                 if (data.activationDate) {
                     var actDate = dateFilter(data.activationDate, scope.df);

@@ -54,13 +54,31 @@
 	        <div class="form-group">
 	            <label class="control-label col-sm-2" for="staffId">{{'label.input.staff' | translate}}</label>
 
-	            <div class="col-sm-3">
+	            <div class="col-sm-5">
 	                <select chosen="staffs" id="staffId" ng-model="formData.staffId" class="form-control"
 	                        ng-options="staff.id as staff.displayName for staff in staffs" value="{{staff.id}}">
 	                    <option value="">{{'label.menu.selectone' | translate}}</option>
 	                </select>
 	            </div>
+                <label class="control-label col-sm-2" for="mobilenumber">{{'label.input.mobilenumber' | translate}}<span class="required">*</span></label>
+
+                <div class="col-sm-1">
+                    <input ng-disabled=true type="text" id="mobilecode" ng-model="code" class="form-control"/>
+                </div>
+                <div class="col-sm-2">
+                    <input type="text" id="mobilenumber" ng-model="formData.mobileNo" class="form-control"/>
+                </div>
 	        </div>
+            <div class="form-group">
+            <label class="control-label col-sm-2" for="emailid">{{'label.input.emailid' | translate}}<span class="required">*</span></label>
+
+            <div class="col-sm-3">
+                <input type="text" id="emailid" ng-model="formData.emailId" class="form-control"/>
+            </div>
+                </div>
+
+
+
 	        <div class="form-group">
 	        	<label class="control-label col-sm-2" for="active">{{'label.input.active' | translate}}</label>
 	        	<div class="col-sm-1">
@@ -76,6 +94,7 @@
 		                </div>
 		            </div>
 		        </div>
+
 	        </div>
 	        <div class="form-group">
 	            <label class="control-label col-sm-2" for="staffId">{{'label.input.addclients' | translate}}</label>
@@ -117,10 +136,14 @@
 		                            <button type="button" class="btn angled-btn btn-primary" data-ng-click="sub(client.id)"><i
 	                                    class="icon-remove"></i></button>
 	                            </div>
+
+
 	                        </div>
 	                    </div>
 	                </div>
+
 	            </div>
+
 	        </div>
 	        <div class="col-md-offset-5">
 	            <a id="cancel" ng-href="{{cancel}}" class="btn btn-default">{{'label.button.cancel' | translate}}</a>
