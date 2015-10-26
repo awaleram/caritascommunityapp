@@ -6,6 +6,7 @@
             scope.report = false;
             scope.hidePentahoReport = true;
             scope.formData = {};
+
             scope.date = {};
             scope.date.payDate = new Date();
             scope.hideAccrualTransactions = false;
@@ -40,18 +41,6 @@
 
 
             };
-
-            resourceFactory.loanInvestmentResource.get({loanId: routeParams.id}, function (data) {
-                scope.loanInvestment = data;
-            });
-            scope.routeToDelete = function (saving_id) {
-                resourceFactory.loanInvestmentResource.delete({
-                    savingId: saving_id,
-                    loanId: routeParams.id
-                }, function (data) {
-                    route.reload();
-                });
-            }
 
             scope.routeToSaving = function (saving_id) {
                 location.path('/viewsavingaccount/' + saving_id);
@@ -697,6 +686,54 @@
                            route.reload();
                        };
 
+                    scope.investedAmountFormDb = null;
+
+                    resourceFactory.loanInvestmentResource.get({loanId: routeParams.id}, function (data) {
+                        scope.loanInvestment = data;
+                        scope.investedAmountFromDb = data.investedAmount;
+                     });
+
+
+            // following function delete the investment and release the amount that from minimum required balance
+
+                    scope.routeToDelete = function (saving_id, investedAmount, start_date) {
+
+                        scope.minimumBalance = null;
+                        scope.investedAmount = investedAmount;
+                        scope.savingId = saving_id;
+                        scope.minimumBalanceRequired=0;
+                        scope.temp = 0;
+
+                        scope.deleteInvestment = {};
+                        scope.stDate = new Date(start_date);
+                        var sttDate = dateFilter(scope.stDate, 'yyyy-MM-dd');
+                        scope.startDate = sttDate;
+                        scope.deleteInvestment.startDate = scope.startDate;
+                        scope.deleteInvestment.savingId = scope.savingId;
+
+                /*        resourceFactory.savingsResource.get({accountId: scope.savingId, associations: 'all'}, function (data) {
+                            scope.savingData = data;
+                            scope.updateSavingJson={};
+                            scope.updateSavingJson.locale = scope.optlang.code;
+
+                            scope.temp = scope.savingData.minRequiredBalance - scope.investedAmount;
+
+                            scope.updateSavingJson.minRequiredBalance = scope.temp;
+                            resourceFactory.savingsResource.update({'accountId':  scope.savingId}, scope.updateSavingJson, function (data){
+                                //  location.path('/viewsavingaccount/' + routeParams.id);
+                            })
+
+                        })
+*/
+
+
+                         resourceFactory.loanInvestmentResourceDelete.save({loanId: routeParams.id},
+                         this.deleteInvestment,
+                         function (data) {
+                        route.reload();
+                    });
+                }
+
 
                scope.selectSaving = function (id) {
                    scope.loan = [];
@@ -740,7 +777,7 @@
                           associations: 'all'
                       }, function (data) {
                           scope.savingData = data;
-
+                          scope.minimumBalanceRequired = scope.savingData.minRequiredBalance;
                           var check = 0;
 
                           resourceFactory.savingsInvestmentResource.get({savingId: scope.savingData.id},function (data) {
@@ -758,7 +795,7 @@
                                       sum = sum + parseInt(scope.loanInvestment[i].investedAmount);
                                   }
                               }
-                              if(scope.formData.investedAmount <= scope.savingData.summary.accountBalance-check) {
+                              if(scope.formData.investedAmount <= (scope.savingData.summary.accountBalance - check)- scope.minimumBalanceRequired ) {
                                   if (scope.formData.investedAmount <= scope.loandetails.principal - sum) {
 
                                       if (scope.loanInvestment.length == 0) {
@@ -768,16 +805,19 @@
                                               accountno: scope.savingData.accountNo,
                                               savingamount: scope.savingData.summary.accountBalance,
                                               saving_id: scope.savingData.id,
-                                              investedAmount: scope.formData.investedAmount
+                                              investedAmount: scope.formData.investedAmount,
+                                              startDate: scope.formData.startDate
                                           });
                                       }
                                       else {
                                           var count = 0;
                                           for (var i = 0; i < scope.loanInvestment.length; i++) {
-                                              if (scope.loanInvestment[i].saving_id == scope.savingData.id) {
-                                                  count++;
-                                                  scope.accountexists = true;
-                                              }
+                                             if(scope.loanInvestment[i].startDate == scope.formData.startDate) {
+                                                 if (scope.loanInvestment[i].saving_id == scope.savingData.id) {
+                                                     count++;
+                                                     scope.accountexists = true;
+                                                 }
+                                             }
                                           }
                                           if (count == 0) {
                                               scope.loanInvestment.push({
@@ -786,7 +826,8 @@
                                                   accountno: scope.savingData.accountNo,
                                                   savingamount: scope.savingData.summary.accountBalance,
                                                   saving_id: scope.savingData.id,
-                                                  investedAmount: scope.formData.investedAmount
+                                                  investedAmount: scope.formData.investedAmount,
+                                                  startDate: scope.formData.startDate
                                               });
                                           }
                                       }
@@ -805,7 +846,7 @@
 
                 };
 
-            scope.submit = function(){
+            scope.UpdateData = function(){
                 resourceFactory.loanInvestmentResource.update({loanId: routeParams.id, savingId: this.formData.Ids, oldSavingId: this.oldSavingId,oldAmount: this.oldAmount,   investedAmounts: this.formData.investedAmounts}, function (data) {
                     scope.changes = data;
                     route.reload();
@@ -815,19 +856,53 @@
             }
 
 
+
                 scope.submitData = function () {
                     scope.savingId = [];
                     scope.investedAmounts = [];
+                    scope.startDate = [];
+                    scope.savingData =[];
+
 
                     for (var i = 0; i < scope.loanInvestment.length; i++) {
                         scope.savingId.push(scope.loanInvestment[i].saving_id);
                         scope.investedAmounts.push(scope.loanInvestment[i].investedAmount);
+                        scope.startDate.push(dateFilter(scope.loanInvestment[i].startDate,  'dd MMMM yyyy'));
                     }
+
+                    for(var i=0; i<scope.savingId; i++){
+
+
+                        scope.minimumBalance = null;
+
+                        scope.id = scope.savingId[i];
+                        scope.amountIndex = i;
+                        scope.minimumBalanceRequired=0;
+                        scope.temp = 0;
+
+                        resourceFactory.savingsResource.get({accountId: scope.id, associations: 'all'}, function (data) {
+                            scope.savingData = data;
+                            scope.updateSavingJson={};
+                            scope.updateSavingJson.locale = scope.optlang.code;
+
+                            scope.temp = scope.savingData.minRequiredBalance + scope.investedAmounts[ scope.amountIndex];
+
+                            scope.updateSavingJson.minRequiredBalance = scope.temp;
+                            resourceFactory.savingsResource.update({'accountId':  scope.id},scope.updateSavingJson, function (data){
+                                //  location.path('/viewsavingaccount/' + routeParams.id);
+                            })
+
+                        })
+
+
+                    }
+
                     scope.loanId = routeParams.id;
                     resourceFactory.loanInvestmentResource.save({
                         savingId: this.savingId,
                         loanId: this.loanId,
-                        investedAmounts: this.investedAmounts
+                        investedAmounts: this.investedAmounts,
+                        startDate: this.startDate
                     }, function (data) {
                         scope.showAddInvestment = true;
                     });

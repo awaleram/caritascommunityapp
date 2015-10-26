@@ -303,8 +303,16 @@
                     savingsInvestmentResource: defineResource(apiVer + "/savingsaccounts/:savingId/savingInvestment",{
                         savingId:'@savingId'},{
                         get: {method: 'GET', params: {}, isArray: true},
-                        delete:{method:'DELETE',params:{loanId: '@loanId'}},
+                        delete:{method:'DELETE'},
                         update: { method: 'PUT'}
+                    }),
+                    investmentBatchJob: defineResource(apiVer + "/investmentBatchJob",{}
+                    ),
+                    savingsInvestmentResourceClose: defineResource(apiVer + "/savingsaccounts/:savingId/savingInvestment/close",{savingId: '@savingId'},{
+                    }),
+                    savingInvestmentResourceDelete: defineResource(apiVer + "/savingsaccounts/:savingId/savingInvestment/delete", {savingId: '@savingId'},{
+                    }),
+                    loanInvestmentResourceDelete: defineResource(apiVer + "/loans/:loanId/loanInvestment/delete",{loanId: '@loanId'},{
                     }),
                     loanInvestmentResource: defineResource(apiVer + "/loans/:loanId/loanInvestment",{
                         loanId: '@loanId'}, {
