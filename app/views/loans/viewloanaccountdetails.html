@@ -870,13 +870,32 @@
                                         <a class="btn btn-primary ng-binding " data-ng-click="ToEdit(loan.saving_id,loan.group_id,loan.investedAmount)">
                                             <i class="icon-edit icon-white"></i>
                                         </a>
-                                        <a class="icon-remove-sign icon-red" data-ng-click="toClose(loan.saving_id, loan.investedAmount, loan.startDate)"></a>
+                                        <a class="icon-remove-sign icon-red" data-ng-click="toClose(loan.saving_id, loan.investedAmount, loan.startDate)"> </a>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
 
                             </br>
+
+                            <script type="text/ng-template" id="closeLoanInvestment.html">
+                                <div class="modal-header silver">
+                                    <h3> Investment Closer Date </h3>
+                                </div>
+                                <div>
+                                    <label class="col-sm-3"> Enter Close Date</label>
+
+                                    <div class="col-sm-4">
+                                        <input id="closeDate" type="text" name="closeDate" datepicker-pop="dd MMMM yyyy"
+                                               ng-model="closeInvestmentData.closeDate" is-open="opened1" max="restrictDate"  class="form-control"/>
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-primary" ng-click="closeInvestment()">Submit</button>
+                                <button class="btn btn-warning" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
+
+                            </script>
+
                         </div>
 
                         <div ng-show="showAddInvestment==false">
@@ -923,7 +942,6 @@
                                             <input type="text" name="startDate" datepicker-pop="dd MMMM yyyy"
                                                    ng-model="formData.startDate" is-open="opened1" max="restrictDate"  class="form-control"/>
                                         </div>
-
 
 
 

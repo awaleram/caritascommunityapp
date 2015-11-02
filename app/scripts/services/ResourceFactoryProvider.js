@@ -310,6 +310,7 @@
                     ),
                     savingsInvestmentResourceClose: defineResource(apiVer + "/savingsaccounts/:savingId/savingInvestment/close",{savingId: '@savingId'},{
                     }),
+                    loanInvestmentResourceClose: defineResource(apiVer + "/loans/:loanId/loanInvestment/close",{loanId: '@loanId'},{}),
                     savingInvestmentResourceDelete: defineResource(apiVer + "/savingsaccounts/:savingId/savingInvestment/delete", {savingId: '@savingId'},{
                     }),
                     loanInvestmentResourceDelete: defineResource(apiVer + "/loans/:loanId/loanInvestment/delete",{loanId: '@loanId'},{

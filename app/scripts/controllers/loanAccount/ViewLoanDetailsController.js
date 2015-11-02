@@ -694,7 +694,41 @@
                      });
 
 
-            // following function delete the investment and release the amount that from minimum required balance
+            // following code is for closing the investment
+
+              scope.toClose = function(saving_id, investmentAmount, start_date){
+                       $modal.open({
+                           templateUrl: 'closeLoanInvestment.html',
+                           controller: CloseLoanInvestCtrl
+                       });
+                       scope.savingId = saving_id;
+                       scope.investedAmount = investmentAmount;
+                       scope.startDate = new Date(start_date);
+                   }
+
+                 var CloseLoanInvestCtrl = function($scope, $modalInstance, $route){
+                 $scope.savingId = routeParams.id;
+                 $scope.closeInvestmentData = {};
+                 $scope.closeInvestmentData.closeDate = new Date();
+                 $scope.cancel = function () {
+                    $modalInstance.close();
+                 };
+
+                 $scope.closeInvestment = function (){
+                    $scope.closeInvestmentData.savingId = scope.savingId;
+                    $scope.closeInvestmentData.loanId = routeParams.id;
+                    var reqDate = dateFilter($scope.closeInvestmentData.closeDate, 'dd MMMM yyyy');
+                    $scope.closeInvestmentData.closeDate = reqDate;
+                    var sDate = dateFilter(scope.startDate, 'yyyy-MM-dd')
+                    $scope.closeInvestmentData.startDate = sDate;
+                    resourceFactory.loanInvestmentResourceClose.save({loanId: routeParams.id}, this.closeInvestmentData, function(data){
+                       $route.reload();
+                    })
+                     $modalInstance.close();
+                 }
+             }
+
+            // following function delete the investment
 
                     scope.routeToDelete = function (saving_id, investedAmount, start_date) {
 
@@ -710,22 +744,6 @@
                         scope.startDate = sttDate;
                         scope.deleteInvestment.startDate = scope.startDate;
                         scope.deleteInvestment.savingId = scope.savingId;
-
-                /*        resourceFactory.savingsResource.get({accountId: scope.savingId, associations: 'all'}, function (data) {
-                            scope.savingData = data;
-                            scope.updateSavingJson={};
-                            scope.updateSavingJson.locale = scope.optlang.code;
-
-                            scope.temp = scope.savingData.minRequiredBalance - scope.investedAmount;
-
-                            scope.updateSavingJson.minRequiredBalance = scope.temp;
-                            resourceFactory.savingsResource.update({'accountId':  scope.savingId}, scope.updateSavingJson, function (data){
-                                //  location.path('/viewsavingaccount/' + routeParams.id);
-                            })
-
-                        })
-*/
-
 
                          resourceFactory.loanInvestmentResourceDelete.save({loanId: routeParams.id},
                          this.deleteInvestment,
@@ -766,6 +784,9 @@
                resourceFactory.loanInvestmentResource.get({loanId: routeParams.id}, function (data) {
                    scope.loanInvestment = data;
                });
+
+
+            // following function will add the investment and once it add the minimum required balace of invester is getting increase
 
               scope.addInvestment = function (Id) {
                   scope.ifNoFunds = false;
@@ -851,8 +872,6 @@
                     scope.changes = data;
                     route.reload();
                 });
-
-
             }
 
 
@@ -870,7 +889,7 @@
                         scope.startDate.push(dateFilter(scope.loanInvestment[i].startDate,  'dd MMMM yyyy'));
                     }
 
-                    for(var i=0; i<scope.savingId; i++){
+                   /* for(var i=0; i<scope.savingId; i++){
 
 
                         scope.minimumBalance = null;
@@ -896,7 +915,7 @@
 
 
                     }
-
+*/
                     scope.loanId = routeParams.id;
                     resourceFactory.loanInvestmentResource.save({
                         savingId: this.savingId,
