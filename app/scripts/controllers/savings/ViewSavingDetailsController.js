@@ -22,12 +22,13 @@
             };
 
 
-            scope.ToEdit = function(id,clientId,amount){
+            scope.ToEdit = function(id,clientId,amount,start_date){
 
                 scope.editId = id;
                 scope.editClientId = clientId;
                 scope.formData.investedAmounts = amount;
                 scope.oldAmount = amount;
+                scope.formData.startDate = start_date;
                 resourceFactory.clientResource.getAllClients(function(data){
 
                     scope.editclients = data.pageItems;
@@ -679,8 +680,12 @@
                 scope.updateInvestedData.oldLoanId = this.oldLoanId;
                 scope.updateInvestedData.oldAmount = this.oldAmount;
                 scope.updateInvestedData.investedAmounts = this.formData.investedAmounts;
+                scope.updateInvestedData.startDate = this.formData.startDate;
+                scope.sDate = new Date(this.formData.startDate);
+                scope.startDateForUpdate = dateFilter(scope.sDate, 'yyyy-MM-dd');
                 resourceFactory.savingsInvestmentResource.update({'savingId': routeParams.id, loanId: this.formData.Ids,
-                    oldLoanId: this.oldLoanId,oldAmount: this.oldAmount,   investedAmounts: this.formData.investedAmounts}, function (data) {
+                    oldLoanId: this.oldLoanId,oldAmount: this.oldAmount,   investedAmounts: this.formData.investedAmounts,
+                    startDate: scope.startDateForUpdate}, function (data) {
                     scope.changes = data;
                     route.reload();
                 });

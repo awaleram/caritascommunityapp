@@ -21,11 +21,13 @@
                 scope.showAddInvestment = false;
             };
 
-            scope.ToEdit = function(id,groupId,amount){
+            scope.ToEdit = function(id,groupId,amount,startdate){
+
                 scope.editId = id;
                 scope.editgroupId = groupId;
                 scope.formData.investedAmounts = amount;
                 scope.oldAmount = amount;
+                scope.formData.startDate = startdate;
                 resourceFactory.groupResource.getAllGroups(function (data) {
                     scope.groups = data;
                 });
@@ -868,7 +870,11 @@
                 };
 
             scope.UpdateData = function(){
-                resourceFactory.loanInvestmentResource.update({loanId: routeParams.id, savingId: this.formData.Ids, oldSavingId: this.oldSavingId,oldAmount: this.oldAmount,   investedAmounts: this.formData.investedAmounts}, function (data) {
+                scope.sDate = new Date(this.formData.startDate);
+                scope.startDateForUpdate = dateFilter(scope.sDate, 'yyyy-MM-dd');
+                resourceFactory.loanInvestmentResource.update({loanId: routeParams.id, savingId: this.formData.Ids, oldSavingId: this.oldSavingId,oldAmount: this.oldAmount,
+                     investedAmounts: this.formData.investedAmounts,
+                     startDate: scope.startDateForUpdate}, function (data) {
                     scope.changes = data;
                     route.reload();
                 });

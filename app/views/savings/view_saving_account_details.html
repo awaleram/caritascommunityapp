@@ -406,11 +406,13 @@
                                                          <td class="pointer" data-ng-click="routeToLoan(loan.loan_id)"> {{loan.startDate | DateFormat}}</td>
                                                          <td class="pointer" data-ng-click="routeToLoan(loan.loan_id)"> {{loan.closeDate | DateFormat}}</td>
                                                          <td >
-                                                               <a class="btn btn-danger" data-ng-click="routeToDelete(loan.loan_id, loan.investedAmount, loan.startDate)"><i class="icon-trash"></i></a>
-                                                               <a  class="btn btn-primary ng-binding " data-ng-click="ToEdit(loan.loan_id,loan.client_id,loan.investedAmount)">
+                                                               <a class="btn btn-danger" tooltip="Delete Investment" data-ng-click="routeToDelete(loan.loan_id, loan.investedAmount, loan.startDate)"><i class="icon-trash"></i></a>
+                                                               <a  class="btn btn-primary ng-binding " tooltip="Update Investment" data-ng-click="ToEdit(loan.loan_id,loan.client_id,loan.investedAmount, loan.startDate)">
                                                                <i class="icon-edit icon-white"></i>
                                                                </a>
-                                                               <a class="icon-remove-sign icon-red" data-ng-click="toClose(loan.loan_id, loan.investedAmount, loan.startDate)"></a>
+                                                               <a class="btn btn-primary ng-binding" tooltip="Close Investment" data-ng-click="toClose(loan.loan_id, loan.investedAmount, loan.startDate)">
+                                                                   <i class="icon-large icon-remove-sign"></i>
+                                                               </a>
                                                          </td>
                                                       </div>
 
