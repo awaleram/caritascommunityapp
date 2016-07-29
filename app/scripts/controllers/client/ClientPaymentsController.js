@@ -884,7 +884,7 @@
               }
 
                 for (var s in scope.savingsAccounts) {
-                    if (scope.savingsAccounts[s].active) {
+                    if (scope.savingsAccounts[s].active && (scope.savingsAccounts[s].accountBalance > 0)) {
                         for (var J in  scope.savingsCharges) {
                         if (scope.savingsAccounts[s].depositAmount != null && scope.savingsAccounts[s].depositAmount != ""&& scope.savingsAccounts[s].depositAmount >0) {
                             if (scope.savingsAccounts[s].accountNo == scope.savingsCharges[J].accountNo) {
@@ -1162,7 +1162,7 @@
                     }
                 }
                 for (var s in scope.savingsAccounts) {
-                    if (scope.savingsAccounts[s].active) {
+                    if (scope.savingsAccounts[s].active && (scope.savingsAccounts[s].accountBalance > 0)) {
                         for (var J in  scope.savingsCharges) {
                             if (scope.savingsAccounts[s].depositAmount != null && scope.savingsAccounts[s].depositAmount != "" && scope.savingsAccounts[s].depositAmount > 0) {
                                 if (scope.savingsAccounts[s].accountNo == scope.savingsCharges[J].accountNo) {
